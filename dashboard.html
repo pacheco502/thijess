@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - CRM Salão de Beleza</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="shortcut icon" href="image.png" type="image/x-icon">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Transições suaves */
+    .transition {
+      transition: all 0.3s ease-in-out;
+    }
+
+    /* Esconder texto do sidebar quando recolhido */
+    .sidebar-collapsed .sidebar-text {
+      display: none;
+    }
+
+    .sidebar-collapsed .sidebar-icon {
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100">
+
+  <!-- Wrapper principal -->
+  <div class="flex">
+    <!-- Sidebar fixa -->
+    <aside id="sidebar" class="w-64 bg-purple-800 text-white h-screen fixed transition flex flex-col">
+      <div class="p-4 flex justify-between items-center">
+          <h3 class="text-lg font-bold sidebar-text">CRM Salão</h3>
+          <button id="toggleSidebar" class="text-white hover:bg-gray-700 p-2 rounded">
+              <i class="fas fa-angle-left"></i>
+          </button>
+      </div>
+      <nav class="mt-6 flex-grow">
+          <a href="dashboard.html" class="flex items-center py-2 px-4 hover:bg-violet-700 rounded sidebar-icon">
+              <i class="fas fa-home"></i>
+              <span class="ml-4 sidebar-text">Dashboard</span>
+          </a>
+          <a href="clientes.html" class="flex items-center py-2 px-4 hover:bg-violet-700 rounded sidebar-icon">
+              <i class="fas fa-users"></i>
+              <span class="ml-4 sidebar-text">Clientes</span>
+          </a>
+          <a href="agendamentos.html" class="flex items-center py-2 px-4 hover:bg-violet-700 rounded sidebar-icon">
+              <i class="fas fa-calendar-alt"></i>
+              <span class="ml-4 sidebar-text">Agendamentos</span>
+          </a>
+          <a href="relatorios.html" class="flex items-center py-2 px-4 hover:bg-violet-700 rounded sidebar-icon">
+              <i class="fas fa-chart-line"></i>
+              <span class="ml-4 sidebar-text">Relatórios</span>
+          </a>
+        <a href="promocoes.html" class="flex items-center py-2 px-4 hover:bg-violet-700 rounded sidebar-icon">
+            <i class="fas fa-tags"></i>
+            <span class="ml-4 sidebar-text">Promoções</span>
+        </a>
+        <a href="configuracoes.html" class="flex items-center py-2 px-4 hover:bg-violet-700 rounded sidebar-icon">
+          <i class="fas fa-cogs"></i>
+          <span class="ml-4 sidebar-text">Configurações</span>
+      </a>
+        
+      </nav>
+      <a href="index.html" class="flex items-center py-2 px-4 mt-6 text-red-400 hover:bg-red-500 hover:text-white rounded sidebar-icon">
+          <i class="fas fa-sign-out-alt"></i>
+          <span class="ml-4 sidebar-text">Sair</span>
+      </a>
+  </aside>
+
+    <!-- Conteúdo Principal -->
+    <main id="mainContent" class="ml-64 w-full">
+      <!-- Navbar Superior -->
+      <header class="bg-white shadow flex justify-between items-center px-6 py-3" aria-label="Barra de navegação superior">
+        <!-- Campo de Pesquisa -->
+        <div class="flex items-center">
+          <label for="search" class="sr-only">Pesquisar</label>
+          <input id="search" type="text" placeholder="Pesquisar..." class="bg-gray-100 rounded-full py-2 px-4 text-gray-800 border focus:border-indigo-500 focus:outline-none focus:ring focus:ring-indigo-300 w-64">
+          <button class="text-gray-500 hover:text-indigo-500 ml-2" aria-label="Buscar">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      
+        <!-- Botões de Ações -->
+        <div class="flex items-center space-x-4">
+          <button title="Email" class="relative text-gray-600 hover:text-indigo-500" aria-label="Email">
+            <i class="fas fa-envelope"></i>
+            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-2">5</span>
+          </button>
+          <button title="Lembretes" class="relative text-gray-600 hover:text-indigo-500" aria-label="Lembretes">
+            <i class="fas fa-bell"></i>
+            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-2">3</span>
+          </button>
+          <button title="Tabelas" class="text-gray-600 hover:text-indigo-500" aria-label="Tabelas">
+            <i class="fas fa-table"></i>
+          </button>
+          <button title="Calendário" class="text-gray-600 hover:text-indigo-500" aria-label="Calendário">
+            <i class="fas fa-calendar-alt"></i>
+          </button>
+          <button title="Central de Suporte" class="text-gray-600 hover:text-indigo-500" aria-label="Central de Suporte">
+            <i class="fas fa-life-ring"></i>
+          </button>
+          <button title="Usuário" class="text-gray-600 hover:text-purple-500" aria-label="Perfil do Usuário">
+            <i class="fas fa-user"></i>
+          </button>
+        </div>
+      </header>
+      
+
+      <!-- Conteúdo do Dashboard -->
+      <section class="p-6" aria-label="Área principal do dashboard">
+        <h1 class="text-2xl font-bold mb-6">Bem-vindo ao Dashboard</h1>
+
+        <!-- Visão Geral de Agendamentos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="bg-white shadow p-6 rounded-lg">
+            <h2 class="text-xl font-semibold mb-4">Agendamentos</h2>
+            <div id="calendar"></div> <!-- Integração com calendário interativo -->
+            <p class="mt-4 text-gray-600">Visualize seus agendamentos diários, semanais e mensais.</p>
+          </div>
+
+          <!-- Estatísticas de Clientes -->
+          <div class="bg-white shadow p-6 rounded-lg">
+            <h2 class="text-xl font-semibold mb-4">Estatísticas de Clientes</h2>
+            <div id="charts"></div> <!-- Gráficos e tabelas -->
+            <p class="mt-4 text-gray-600">Veja o crescimento de sua base de clientes e suas preferências.</p>
+          </div>
+
+          <!-- Relatórios Financeiros -->
+          <div class="bg-white shadow p-6 rounded-lg">
+            <h2 class="text-xl font-semibold mb-4">Relatórios Financeiros</h2>
+            <div id="financial-reports"></div> <!-- Painéis de receitas, despesas e lucro -->
+            <p class="mt-4 text-gray-600">Acompanhe suas finanças e relatórios de vendas.</p>
+          </div>
+        </div>
+
+        <!-- Outras Seções -->
+        <div class="mt-6 space-y-6">
+          <!-- Metas e Desempenho -->
+          <div class="bg-white shadow p-6 rounded-lg">
+            <h2 class="text-xl font-semibold mb-4">Metas e Desempenho</h2>
+            <p class="mt-4 text-gray-600">Defina metas de vendas e atendimento, com KPIs de progresso.</p>
+          </div>
+
+          <!-- Feedback dos Clientes -->
+          <div class="bg-white shadow p-6 rounded-lg">
+            <h2 class="text-xl font-semibold mb-4">Feedback dos Clientes</h2>
+            <p class="mt-4 text-gray-600">Veja as últimas avaliações e responda ao feedback dos clientes.</p>
+          </div>
+
+          <!-- Promoções e Ofertas -->
+          <div class="bg-white shadow p-6 rounded-lg">
+            <h2 class="text-xl font-semibold mb-4">Promoções e Ofertas</h2>
+            <p class="mt-4 text-gray-600">Gerencie promoções e ofertas, e saiba quais estão prestes a expirar.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const toggleSidebar = document.getElementById('toggleSidebar');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+
+    toggleSidebar.addEventListener('click', () => {
+      sidebar.classList.toggle('w-64');
+      sidebar.classList.toggle('w-16');
+      sidebar.classList.toggle('sidebar-collapsed');
+      mainContent.classList.toggle('ml-64');
+      mainContent.classList.toggle('ml-16');
+      toggleSidebar.innerHTML = sidebar.classList.contains('w-16')
+        ? '<i class="fas fa-angle-right"></i>'
+        : '<i class="fas fa-angle-left"></i>';
+    });
+  </script>
+</body>
+
+</html>

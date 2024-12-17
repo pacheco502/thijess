@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THIJESS - CRM Salão de Beleza</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<style>
+    @keyframes slide-in-left {
+        from {
+            transform: translateX(-100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slide-in-right {
+        from {
+            transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+</style>
+
+<body class="min-h-screen relative overflow-hidden">
+    <!-- Imagem de Fundo em Tela Cheia -->
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
+        style="background-image: url('WhatsApp\ Image\ 2024-12-01\ at\ 21.40.01.jpeg')">
+        <!-- Camada de escurecimento -->
+        <div class="absolute inset-0 bg-violetopacity-50"></div>
+    </div>
+
+    <!-- Container do Login -->
+    <div id="loginContainer" class="relative z-10 flex items-center justify-center min-h-screen">
+        <div id="loginCard" 
+        class="w-full max-w-md p-8 bg-white backdrop-blur-lg rounded-xl shadow-2xl transform transition-all duration-700 ease-in-out">
+            <!-- Substituindo vídeo por GIF -->
+            <img src="Design sem nome.gif" alt="Animação de logotipo" class="w-full rounded-md mb-6">
+            
+            <form id="loginForm" action="dashboard.html" method="GET">
+                <div class="mb-4">
+                    <label class="block text-violet-700 text-sm font-bold mb-2" htmlFor="email">
+                        E-mail
+                    </label>
+                    <input type="email" id="email" name="email" placeholder="Digite seu e-mail"
+                        class="w-full p-3 border border-violet-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        required>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-violet-700 text-sm font-bold mb-2" htmlFor="password">
+                        Senha
+                    </label>
+                    <input type="password" id="password" name="password" placeholder="Digite sua senha"
+                        class="w-full p-3 border border-violet-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        required>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-violet-500 text-white p-3 rounded-lg hover:bg-violet-600 transition duration-300">
+                    Entrar
+                </button>
+
+            </form>
+
+            <div class="text-center mt-4">
+                <a href="#" class="text-indigo-500 hover:underline mr-2">Esqueceu sua senha?</a><br>
+                <!-- possivel exclusão -->
+                <a href="#" class="text-indigo-500 hover:underline">Registrar-se</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            const loginContainer = document.getElementById('loginContainer');
+            const loginCard = document.getElementById('loginCard');
+            const loginForm = document.getElementById('loginForm');
+
+            // Inicial começa fora da tela
+            loginCard.style.opacity = '0';
+            loginCard.style.transform = 'scale(0.7)';
+
+            // Anima a entrada
+            setTimeout(() => {
+                loginCard.style.opacity = '1';
+                loginCard.style.transform = 'scale(1)';
+            }, 300);
+
+            // Validação de login simples
+            loginForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                // Validação básica (você deve substituir por sua lógica de autenticação real)
+                if (email && password) {
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert('Por favor, preencha email e senha');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

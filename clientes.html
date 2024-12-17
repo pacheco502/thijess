@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard - CRM Salão de Beleza</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="shortcut icon" href="image.png" type="image/x-icon">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <style>
+    /* Transições suaves */
+    .transition {
+      transition: all 0.3s ease-in-out;
+    }
+
+    /* Esconder texto do sidebar quando recolhido */
+    .sidebar-collapsed .sidebar-text {
+      display: none;
+    }
+
+    .sidebar-collapsed .sidebar-icon {
+      justify-content: center;
+    }
+        </style>
+    </head>
+    <body class="bg-gray-100">
+        <!-- Wrapper principal -->
+        <div class="flex">
+            <!-- Sidebar fixa -->
+            <aside id="sidebar" class="w-64 bg-purple-800 text-white h-screen fixed transition flex flex-col">
+                <div class="p-4 flex justify-between items-center">
+                    <h3 class="text-lg font-bold sidebar-text">CRM Salão</h3>
+                    <button id="toggleSidebar" class="text-white hover:bg-gray-700 p-2 rounded">
+                        <i class="fas fa-angle-left"></i>
+                    </button>
+                </div>
+                <nav class="mt-6 flex-grow">
+                    <a href="dashboard.html" class="flex items-center py-2 px-4 hover:bg-violet-700 rounded sidebar-icon">
+                        <i class="fas fa-home"></i>
+                        <span class="ml-4 sidebar-text">Dashboard</span>
+                    </a>
+                    <a href="clientes.html" class="flex items-center py-2 px-4 hover:bg-violet-700 rounded sidebar-icon">
+                        <i class="fas fa-users"></i>
+                        <span class="ml-4 sidebar-text">Clientes</span>
+                    </a>
+                    <a href="agendamentos.html" class="flex items-center py-2 px-4 hover:bg-violet-700 rounded sidebar-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span class="ml-4 sidebar-text">Agendamentos</span>
+                    </a>
+                    <a href="relatorios.html" class="flex items-center py-2 px-4 hover:bg-violet-700 rounded sidebar-icon">
+                        <i class="fas fa-chart-line"></i>
+                        <span class="ml-4 sidebar-text">Relatórios</span>
+                    </a>
+                    <a href="promocoes.html" class="flex items-center py-2 px-4 hover:bg-violet-700 rounded sidebar-icon">
+                        <i class="fas fa-tags"></i>
+                        <span class="ml-4 sidebar-text">Promoções</span>
+                    </a>
+                    <a href="configuracoes.html" class="flex items-center py-2 px-4 hover:bg-violet-700 rounded sidebar-icon">
+                        <i class="fas fa-cogs"></i>
+                        <span class="ml-4 sidebar-text">Configurações</span>
+                    </a>
+                </nav>
+                <a href="index.html" class="flex items-center py-2 px-4 mt-6 text-red-400 hover:bg-red-500 hover:text-white rounded sidebar-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="ml-4 sidebar-text">Sair</span>
+                </a>
+            </aside>
+            <!-- Conteúdo Principal -->
+            <main id="mainContent" class="ml-64 w-full">
+                <!-- Navbar Superior -->
+                <header class="bg-white shadow flex justify-between items-center px-6 py-3" aria-label="Barra de navegação superior">
+                    <!-- Campo de Pesquisa -->
+                    <div class="flex items-center">
+                        <label for="search" class="sr-only">Pesquisar</label>
+                        <input
+                            id="search"
+                            type="text"
+                            placeholder="Pesquisar..."
+                            class="bg-gray-100 rounded-full py-2 px-4 text-gray-800 border focus:border-indigo-500 focus:outline-none focus:ring focus:ring-indigo-300 w-64"
+                        >
+                        <button class="text-gray-500 hover:text-indigo-500 ml-2" aria-label="Buscar">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <!-- Botões de Ações -->
+                    <div class="flex items-center space-x-4">
+                        <button title="Email" class="relative text-gray-600 hover:text-indigo-500" aria-label="Email">
+                            <i class="fas fa-envelope"></i>
+                            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-2">5</span>
+                        </button>
+                        <button title="Lembretes" class="relative text-gray-600 hover:text-indigo-500" aria-label="Lembretes">
+                            <i class="fas fa-bell"></i>
+                            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-2">3</span>
+                        </button>
+                        <button title="Tabelas" class="text-gray-600 hover:text-indigo-500" aria-label="Tabelas">
+                            <i class="fas fa-table"></i>
+                        </button>
+                        <button title="Calendário" class="text-gray-600 hover:text-indigo-500" aria-label="Calendário">
+                            <i class="fas fa-calendar-alt"></i>
+                        </button>
+                        <button title="Central de Suporte" class="text-gray-600 hover:text-indigo-500" aria-label="Central de Suporte">
+                            <i class="fas fa-life-ring"></i>
+                        </button>
+                        <button title="Usuário" class="text-gray-600 hover:text-purple-500" aria-label="Perfil do Usuário">
+                            <i class="fas fa-user"></i>
+                        </button>
+                    </div>
+                </header>
+                <!-- Conteúdo do Dashboard -->
+                <div id="clientesContent" class="p-6">
+                    <!-- Ações Disponíveis -->
+                    <div class="flex space-x-4 mb-6">
+                        <button onclick="openModal('addModal')" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+                            Adicionar Novo Cliente
+                        </button>
+                        <button onclick="openModal('editModal')" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                            Editar Cliente
+                        </button>
+                        <button onclick="openModal('exportModal')" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+                            Exportar Informações
+                        </button>
+                    </div>
+                    <h1 class="text-2xl font-bold mb-6">Informações do Cliente</h1>
+                    <!-- Informações Básicas e Detalhes do Perfil Lado a Lado -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Informações Básicas do Cliente -->
+                        <div class="bg-white shadow p-6 rounded-lg">
+                            <h2 class="text-xl font-semibold mb-4">Informações Básicas</h2>
+                            <div class="space-y-4">
+                                <p>
+                                    <strong>Nome Completo:</strong>
+                                    João da Silva
+                                </p>
+                                <p>
+                                    <strong>Email:</strong>
+                                    joao.silva@email.com
+                                </p>
+                                <p>
+                                    <strong>Telefone:</strong>
+                                    (11) 99999-9999
+                                </p>
+                                <p>
+                                    <strong>Endereço:</strong>
+                                    Rua Exemplo, 123, São Paulo, SP
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Detalhes do Perfil do Cliente -->
+                        <div class="bg-white shadow p-6 rounded-lg">
+                            <h2 class="text-xl font-semibold mb-4">Detalhes do Perfil</h2>
+                            <div class="space-y-4">
+                                <p>
+                                    <strong>Data de Nascimento:</strong>
+                                    15/05/1990
+                                </p>
+                                <p>
+                                    <strong>Gênero:</strong>
+                                    Masculino
+                                </p>
+                                <div>
+                                    <strong>Foto do Cliente:</strong>
+                                    <img src="https://via.placeholder.com/150" alt="Foto do Cliente" class="mt-2 rounded-full">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Histórico de Agendamentos e Preferências e Observações Lado a Lado -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Histórico de Agendamentos -->
+                        <div class="bg-white shadow p-6 rounded-lg">
+                            <h2 class="text-xl font-semibold mb-4">Histórico de Agendamentos</h2>
+                            <div class="space-y-4">
+                                <p>
+                                    <strong>Agendamento 1:</strong>
+                                    10/11/2024 - 14:00 | Serviço: Corte de Cabelo | Profissional: Maria Souza
+                                </p>
+                                <p>
+                                    <strong>Agendamento 2:</strong>
+                                    05/12/2024 - 10:00 | Serviço: Manicure | Profissional: Ana Lima
+                                </p>
+                                <p>
+                                    <strong>Notas:</strong>
+                                    Cliente preferiu corte de cabelo mais curto.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Preferências e Observações -->
+                        <div class="bg-white shadow p-6 rounded-lg">
+                            <h2 class="text-xl font-semibold mb-4">Preferências e Observações</h2>
+                            <div class="space-y-4">
+                                <p>
+                                    <strong>Produtos Favoritos:</strong>
+                                    Shampoo Hidratante, Óleo de Argan
+                                </p>
+                                <p>
+                                    <strong>Serviços Preferidos:</strong>
+                                    Corte de Cabelo, Manicure
+                                </p>
+                                <p>
+                                    <strong>Observações Pessoais:</strong>
+                                    Estilo de cabelo: Curto, Cor preferida: Azul
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fidelidade e Promoções e Feedback e Avaliações Lado a Lado -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Fidelidade e Promoções -->
+                        <div class="bg-white shadow p-6 rounded-lg">
+                            <h2 class="text-xl font-semibold mb-4">Fidelidade e Promoções</h2>
+                            <div class="space-y-4">
+                                <p>
+                                    <strong>Pontos de Fidelidade:</strong>
+                                    150 pontos
+                                </p>
+                                <p>
+                                    <strong>Histórico de Promoções:</strong>
+                                    Desconto de 10% no último serviço de corte de cabelo.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Feedback e Avaliações -->
+                        <div class="bg-white shadow p-6 rounded-lg">
+                            <h2 class="text-xl font-semibold mb-4">Feedback e Avaliações</h2>
+                            <div class="space-y-4">
+                                <p>
+                                    <strong>Avaliação:</strong>
+                                    4.5/5
+                                </p>
+                                <p>
+                                    <strong>Feedback:</strong>
+                                    "Adorei o corte, mas gostaria de um pouco mais de volume no topo."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Documentos e Anexos -->
+                    <div class="bg-white shadow p-6 rounded-lg mb-6">
+                        <h2 class="text-xl font-semibold mb-4">Documentos e Anexos</h2>
+                        <div class="space-y-4">
+                            <p>
+                                <strong>Documentos:</strong>
+                                Nenhum documento anexado.
+                            </p>
+                            <p>
+                                <strong>Fotos de Antes e Depois:</strong>
+                                <a href="#" class="text-blue-500">Ver Fotos</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modals -->
+                <!-- Editar Cliente Modal -->
+                <div id="editModal" class="modal fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+                    <div class="bg-white p-6 rounded-lg w-1/3">
+                        <h2 class="text-2xl font-semibold mb-4">Editar Cliente</h2>
+                        <form>
+                            <div class="mb-4">
+                                <label for="editName" class="block text-sm font-semibold">Nome Completo</label>
+                                <input
+                                    type="text"
+                                    id="editName"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                    value="João da Silva"
+                                >
+                            </div>
+                            <div class="mb-4">
+                                <label for="editEmail" class="block text-sm font-semibold">Email</label>
+                                <input
+                                    type="email"
+                                    id="editEmail"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                    value="joao.silva@email.com"
+                                >
+                            </div>
+                            <div class="mb-4">
+                                <label for="editPhone" class="block text-sm font-semibold">Telefone</label>
+                                <input
+                                    type="text"
+                                    id="editPhone"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                    value="(11) 99999-9999"
+                                >
+                            </div>
+                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Salvar Alterações</button>
+                            <button type="button" onclick="closeModal('editModal')" class="ml-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Lista de Clientes (Exemplo com botões para excluir) -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="client1" class="mr-4">
+                            <span class="text-lg font-semibold">João Silva</span>
+                        </div>
+                        <div>
+                            <button onclick="openDeleteModal('João Silva')" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Excluir</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="client2" class="mr-4">
+                            <span class="text-lg font-semibold">Maria Oliveira</span>
+                        </div>
+                        <div>
+                            <button onclick="openDeleteModal('Maria Oliveira')" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Excluir</button>
+                        </div>
+                    </div>
+                    <!-- Adicione mais clientes conforme necessário -->
+                </div>
+                <!-- Modal de Confirmação de Exclusão -->
+                <div id="deleteModal" class="modal fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+                    <div class="bg-white p-6 rounded-lg w-1/3">
+                        <h2 class="text-2xl font-semibold mb-4">Confirmar Exclusão</h2>
+                        <p id="deleteMessage" class="text-lg mb-4">Tem certeza que deseja excluir o cliente?</p>
+                        <div class="flex space-x-4">
+                            <button onclick="deleteClient()" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Excluir</button>
+                            <button onclick="closeModal('deleteModal')" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+    let clientToDelete = ''; // Armazena o nome do cliente selecionado para exclusão
+  
+    // Função para abrir o modal de exclusão
+    function openDeleteModal(clientName) {
+      clientToDelete = clientName; // Define o cliente selecionado
+      document.getElementById('deleteMessage').textContent = `Tem certeza que deseja excluir o cliente ${clientName}?`;
+      document.getElementById('deleteModal').classList.remove('hidden'); // Exibe o modal
+    }
+  
+    // Função para excluir o cliente (Exemplo de exclusão)
+    function deleteClient() {
+      // Aqui você pode adicionar a lógica para excluir o cliente do banco de dados ou da lista
+      alert(`${clientToDelete} foi excluído com sucesso!`);
+  
+      // Após a exclusão, feche o modal
+      closeModal('deleteModal');
+    }
+  
+    // Função para fechar qualquer modal
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+  
+    // Função para abrir qualquer modal
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.remove('hidden');
+    }
+                </script>
+                <!-- Adicionar Novo Cliente Modal -->
+                <div id="addModal" class="modal fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+                    <div class="bg-white p-6 rounded-lg w-1/3">
+                        <h2 class="text-2xl font-semibold mb-4">Adicionar Novo Cliente</h2>
+                        <form>
+                            <div class="mb-4">
+                                <label for="newName" class="block text-sm font-semibold">Nome Completo</label>
+                                <input
+                                    type="text"
+                                    id="newName"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                    required
+                                >
+                            </div>
+                            <div class="mb-4">
+                                <label for="newEmail" class="block text-sm font-semibold">Email</label>
+                                <input
+                                    type="email"
+                                    id="newEmail"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                    required
+                                >
+                            </div>
+                            <div class="mb-4">
+                                <label for="newPhone" class="block text-sm font-semibold">Telefone</label>
+                                <input
+                                    type="text"
+                                    id="newPhone"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                    required
+                                >
+                            </div>
+                            <div class="mb-4">
+                                <label for="newAddress" class="block text-sm font-semibold">Endereço</label>
+                                <input type="text" id="newAddress" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                            </div>
+                            <div class="mb-4">
+                                <label for="newDOB" class="block text-sm font-semibold">Data de Nascimento</label>
+                                <input
+                                    type="date"
+                                    id="newDOB"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                    required
+                                >
+                            </div>
+                            <div class="mb-4">
+                                <label for="newGender" class="block text-sm font-semibold">Gênero</label>
+                                <select id="newGender" class="w-full px-4 py-2 border border-gray-300 rounded-md" required>
+                                    <option value="">Selecione</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Feminino">Feminino</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="newPhoto" class="block text-sm font-semibold">Foto do Cliente</label>
+                                <input type="file" id="newPhoto" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                            </div>
+                            <div class="flex space-x-4">
+                                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Adicionar Cliente</button>
+                                <button type="button" onclick="closeModal('addModal')" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- Lista de Clientes (Exemplo com botões para excluir) -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="client1" class="mr-4">
+                            <span class="text-lg font-semibold">João Silva</span>
+                        </div>
+                        <div>
+                            <button onclick="openDeleteModal('João Silva')" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Excluir</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="client2" class="mr-4">
+                            <span class="text-lg font-semibold">Maria Oliveira</span>
+                        </div>
+                        <div>
+                            <button onclick="openDeleteModal('Maria Oliveira')" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Excluir</button>
+                        </div>
+                    </div>
+                    <!-- Adicione mais clientes conforme necessário -->
+                </div>
+                <!-- Modal de Confirmação de Exclusão -->
+                <div id="deleteModal" class="modal fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+                    <div class="bg-white p-6 rounded-lg w-1/3">
+                        <h2 class="text-2xl font-semibold mb-4">Confirmar Exclusão</h2>
+                        <p id="deleteMessage" class="text-lg mb-4">Tem certeza que deseja excluir o cliente?</p>
+                        <div class="flex space-x-4">
+                            <button onclick="deleteClient()" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Excluir</button>
+                            <button onclick="closeModal('deleteModal')" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+    let clientToDelete = ''; // Armazena o nome do cliente selecionado para exclusão
+    // Função para abrir o modal de exclusão
+    function openDeleteModal(clientName) {
+      clientToDelete = clientName; // Define o cliente selecionado
+      document.getElementById('deleteMessage').textContent = `Tem certeza que deseja excluir o cliente ${clientName}?`;
+      document.getElementById('deleteModal').classList.remove('hidden'); // Exibe o modal
+    }
+  
+    // Função para excluir o cliente (Exemplo de exclusão)
+    function deleteClient() {
+      // Aqui você pode adicionar a lógica para excluir o cliente do banco de dados ou da lista
+      alert(`${clientToDelete} foi excluído com sucesso!`);
+  
+      // Após a exclusão, feche o modal
+      closeModal('deleteModal');
+    }
+  
+    // Função para fechar qualquer modal
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+                </script>
+                <!-- Adicionar Novo Cliente Modal -->
+                <div id="addModal" class="modal fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+                    <div class="bg-white p-6 rounded-lg w-1/3">
+                        <h2 class="text-2xl font-semibold mb-4">Adicionar Novo Cliente</h2>
+                        <form>
+                            <!-- Informações Básicas -->
+                            <div class="mb-4">
+                                <label for="newName" class="block text-sm font-semibold">Nome Completo</label>
+                                <input
+                                    type="text"
+                                    id="newName"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                    required
+                                >
+                            </div>
+                            <div class="mb-4">
+                                <label for="newEmail" class="block text-sm font-semibold">Email</label>
+                                <input
+                                    type="email"
+                                    id="newEmail"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                    required
+                                >
+                            </div>
+                            <div class="mb-4">
+                                <label for="newPhone" class="block text-sm font-semibold">Telefone</label>
+                                <input
+                                    type="text"
+                                    id="newPhone"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                    required
+                                >
+                            </div>
+                            <div class="mb-4">
+                                <label for="newAddress" class="block text-sm font-semibold">Endereço</label>
+                                <input type="text" id="newAddress" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                            </div>
+                            <!-- Detalhes do Perfil -->
+                            <div class="mb-4">
+                                <label for="newDOB" class="block text-sm font-semibold">Data de Nascimento</label>
+                                <input
+                                    type="date"
+                                    id="newDOB"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                    required
+                                >
+                            </div>
+                            <div class="mb-4">
+                                <label for="newGender" class="block text-sm font-semibold">Gênero</label>
+                                <select id="newGender" class="w-full px-4 py-2 border border-gray-300 rounded-md" required>
+                                    <option value="">Selecione</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Feminino">Feminino</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                            </div>
+                            <!-- Foto do Cliente -->
+                            <div class="mb-4">
+                                <label for="newPhoto" class="block text-sm font-semibold">Foto do Cliente</label>
+                                <input type="file" id="newPhoto" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                            </div>
+                            <!-- Botões -->
+                            <div class="flex space-x-4">
+                                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Adicionar Cliente</button>
+                                <button type="button" onclick="closeModal('addModal')" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- Exportar Informações Modal -->
+                <div id="exportModal" class="modal fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+                    <div class="bg-white p-6 rounded-lg w-1/3">
+                        <h2 class="text-2xl font-semibold mb-4">Exportar Informações</h2>
+                        <p class="mb-4">Deseja exportar as informações para um arquivo CSV?</p>
+                        <div class="flex space-x-4">
+                            <button onclick="exportData()" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Exportar</button>
+                            <button type="button" onclick="closeModal('exportModal')" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    function openModal(modalId) {
+                      document.getElementById(modalId).classList.remove('hidden');
+                    }
+                  
+                    function closeModal(modalId) {
+                      document.getElementById(modalId).classList.add('hidden');
+                    }
+                  
+                    function deleteClient() {
+                      // Função para excluir o cliente
+                      console.log("Cliente excluído");
+                      closeModal('deleteModal');
+                    }
+                  
+                    function exportData() {
+                      // Função para exportar dados (CSV)
+                      console.log("Exportando dados");
+                      closeModal('exportModal');
+                    }
+                </script>
+            </div>
+        </div>
+        <script>
+    const toggleSidebar = document.getElementById('toggleSidebar');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+
+    toggleSidebar.addEventListener('click', () => {
+      sidebar.classList.toggle('w-64');
+      sidebar.classList.toggle('w-16');
+      sidebar.classList.toggle('sidebar-collapsed');
+      mainContent.classList.toggle('ml-64');
+      mainContent.classList.toggle('ml-16');
+      toggleSidebar.innerHTML = sidebar.classList.contains('w-16') 
+        ? '<i class="fas fa-angle-right"></i>' 
+        : '<i class="fas fa-angle-left"></i>';
+    });
+    // Abrir o modal de adicionar cliente
+    const addClientBtn = document.getElementById("addClientBtn");
+    const addClientModal = document.getElementById("addClientModal");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+
+    addClientBtn.addEventListener("click", () => {
+        addClientModal.classList.remove("hidden");
+    });
+
+    closeModalBtn.addEventListener("click", () => {
+        addClientModal.classList.add("hidden");
+    });
+
+    // Fechar o modal se clicar fora da caixa
+    window.addEventListener("click", (e) => {
+        if (e.target === addClientModal) {
+            addClientModal.classList.add("hidden");
+        }
+    });
+
+    // Adicionar cliente (simulação)
+    document.getElementById("addClientForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("Cliente adicionado com sucesso!");
+        addClientModal.classList.add("hidden");
+    });
+        </script>
+    </body>
+</html>
